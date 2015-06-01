@@ -1,7 +1,7 @@
 <?php
 include("conf.php");
 // find unresponsive games
-if ($games = $db->query("SELECT * FROM games WHERE status=1 AND last_updated < (NOW() - INTERVAL 2 MINUTE)")){
+if ($games = $db->query("SELECT * FROM games WHERE (status=0 OR status=1) AND last_updated < (NOW() - INTERVAL 2 MINUTE)")){
 while($row = $games->fetch_assoc()) {
     $uuid = $row['uuid'];
     $db->query("UPDATE games SET status=3 WHERE uuid='$uuid'");
