@@ -13,10 +13,10 @@ NOTE: this link doesn't exists , and ofc it should be used as variable in upcomi
 3. When game starts:  
 `http://opendungeons.tuxfamily.org/masterserver/update.php?uuid=UUID-HERE&status=1`
 
-4. Then during a game every 1 min another request should be made:
+4. Then during a game every 1 min another request should be made:  
 `http://opendungeons.tuxfamily.org/masterserver/update.php?uuid=UUID-HERE&status=1`
 
-5. And one when game ends:
+5. And one when game ends:  
 `http://opendungeons.tuxfamily.org/masterserver/update.php?uuid=UUID-HERE&status=2`
 
 **Status:** (2015/06/12)
