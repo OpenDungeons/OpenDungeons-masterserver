@@ -11,9 +11,9 @@ while($row = $games->fetch_assoc()) {
 }
 unset($row);
 
-$result = $db->query("SELECT * FROM games WHERE status=0 OR status=1 ORDER BY announce_time DESC");
+$result = $db->query("SELECT * FROM games WHERE status=0 OR status=1 OR status=3 ORDER BY announce_time DESC");
 while($row = $result->fetch_assoc()){
-  echo $row['id']."|".$row['uuid'].$row['ip_address']."|".$row['status']."|".$row['announce_time']."|".$row['last_updated'].PHP_EOL;
+  echo $row['id']."|".$row['uuid']."|".$row['ip_address']."|".$row['status']."|".$row['announce_time']."|".$row['last_updated'].PHP_EOL;
 }
 
 ?>
