@@ -1,20 +1,25 @@
 <?php
-if(isset($_GET['uuid']) && isset($_GET['status'])) {
+if(isset($_POST['uuid']) && isset($_POST['status'])) {
 
     include("conf.php");
 
-    $uuid = $db->real_escape_string($_GET['uuid']);
-    $status = $db->real_escape_string($_GET['status']);
-    $status = intval($status);
+    $status = $_POST['status'];
+    $uuid = $_POST['uuid'];
 
-
-    if($db->query("UPDATE games SET status=$status, last_updated=NOW() WHERE uuid='$uuid'")) {
-        print_r("ok");
-    } else {
-        die("error");
+    $stmt = $db->prepare("UPDATE games SET status=?, last_updated=NOW() WHERE uuid=?");
+    if(!$stmt) {
+        die("error: ".mysqli_error($db));
     }
 
+    /* Bind parameters: s - string, b - blob, i - int, d - decimal */
+    if (!$stmt ->bind_param("is", $status, $uuid)) {
+        die("error: ".mysqli_error($db));
+    }
+
+    if (!$stmt->execute()) {
+        die("error: ".mysqli_error($db));
+    }
 }
 else {
-    die("No UUID/Status provided.");
+    die("Missing parameters.");
 }

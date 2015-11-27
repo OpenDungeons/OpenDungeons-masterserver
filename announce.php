@@ -1,21 +1,42 @@
 <?php
-if(isset($_GET['uuid']) && isset($_GET['ip'])  ){
-
+if(isset($_POST['odVersion']) && isset($_POST['creator']) && isset($_POST['port']) && isset($_POST['label']) && isset($_POST['descr'])) {
     include("conf.php");
-    $uuid = $db->real_escape_string($_GET['uuid']);
-    $ip_address = $db->real_escape_string($_GET['ip']);
-    $uuid = strtolower($uuid);
-    if(strlen($uuid) == 36){
-        if($db->query("INSERT INTO games (uuid,ip_address,announce_time) VALUES ('$uuid','$ip_address', NOW() )")) {
-            print_r("ok");
-        } else {
-            die("error: ".mysqli_error($db));
-        }
-    } else {
-        die("error: this is not an UUID.");
+    include("str.php");
+    $result = $db->query("SELECT CONCAT(DATE_FORMAT(NOW(),'%Y%m%d%H%i%S'), REPLACE(UUID(),'-',''))");
+    if (!$result) {
+        die("error: ".mysqli_error($db));
+    }
+    $row = $result->fetch_row();
+    if (!$row) {
+        die("error: ".mysqli_error($db));
     }
 
-} else {
-    die("error: no UUID/IP provided.");
+    $uuid = $row[0];
+    $odVersion = $_POST['odVersion'];
+    $creator = $_POST['creator'];
+    $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $port = $_POST['port'];
+    $label = $_POST['label'];
+    $descr = $_POST['descr'];
+
+    $stmt = $db->prepare("INSERT INTO games (uuid,od_version,creator,ip_address,port,label,descr,last_updated) VALUES (?,?,?,?,?,?,?,NOW())");
+    if(!$stmt) {
+        die("error: ".mysqli_error($db));
+    }
+
+    /* Bind parameters: s - string, b - blob, i - int, d - decimal */
+    if (!$stmt ->bind_param("ssssiss", $uuid, $odVersion, $creator, $ip_address, $port, $label, $descr)) {
+        die("error: ".mysqli_error($db));
+    }
+
+    if (!$stmt->execute()) {
+        die("error: ".mysqli_error($db));
+    }
+
+    echo "uuid=" . $uuid;
 }
+else {
+    die("Missing parameters.");
+}
+
 ?>
