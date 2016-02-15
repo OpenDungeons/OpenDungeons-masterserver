@@ -2,7 +2,7 @@
 if(isset($_POST['odVersion']) && isset($_POST['creator']) && isset($_POST['port']) && isset($_POST['label']) && isset($_POST['descr'])) {
     include("conf.php");
     include("str.php");
-    $result = $db->query("SELECT CONCAT(DATE_FORMAT(NOW(),'%Y%m%d%H%i%S'), REPLACE(UUID(),'-',''))");
+    $result = $db->query("SELECT CONCAT(DATE_FORMAT(UTC_TIMESTAMP(),'%Y%m%d%H%i%S'), REPLACE(UUID(),'-',''))");
     if (!$result) {
         die("error: ".mysqli_error($db));
     }
@@ -19,7 +19,7 @@ if(isset($_POST['odVersion']) && isset($_POST['creator']) && isset($_POST['port'
     $label = $_POST['label'];
     $descr = $_POST['descr'];
 
-    $stmt = $db->prepare("INSERT INTO games (uuid,od_version,creator,ip_address,port,label,descr,last_updated) VALUES (?,?,?,?,?,?,?,NOW())");
+    $stmt = $db->prepare("INSERT INTO games (uuid,od_version,creator,ip_address,port,label,descr,last_updated) VALUES (?,?,?,?,?,?,?,UTC_TIMESTAMP())");
     if(!$stmt) {
         die("error: ".mysqli_error($db));
     }

@@ -36,7 +36,7 @@ include("conf.php");
             <th>last_updated</th>
         </tr>
     <?php
-    $result = $db->query("SELECT * FROM games WHERE status=0 AND last_updated > (NOW() - INTERVAL 1 MINUTE) ORDER BY creator ASC");
+    $result = $db->query("SELECT * FROM games WHERE status=0 AND last_updated > (UTC_TIMESTAMP() - INTERVAL 1 MINUTE) ORDER BY creator ASC");
     while($row = $result->fetch_assoc()){
     ?>
         <tr>
@@ -63,7 +63,7 @@ include("conf.php");
             <th>last_updated</th>
         </tr>
     <?php
-    $result = $db->query("SELECT * FROM games WHERE status=1 ORDER BY last_updated");
+    $result = $db->query("SELECT * FROM games WHERE status=1 AND last_updated > (UTC_TIMESTAMP() - INTERVAL 24 HOUR) ORDER BY last_updated");
     while($row = $result->fetch_assoc()){
     ?>
         <tr>
@@ -117,7 +117,7 @@ include("conf.php");
             <th>last_updated</th>
         </tr>
     <?php
-    $result = $db->query("SELECT * FROM games WHERE status=0 AND last_updated < (NOW() - INTERVAL 1 MINUTE) ORDER BY last_updated");
+    $result = $db->query("SELECT * FROM games WHERE status=0 AND last_updated < (UTC_TIMESTAMP() - INTERVAL 1 MINUTE) ORDER BY last_updated");
     while($row = $result->fetch_assoc()){
     ?>
         <tr>
