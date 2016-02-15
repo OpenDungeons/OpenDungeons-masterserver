@@ -6,7 +6,7 @@ if(isset($_POST['uuid']) && isset($_POST['status'])) {
     $status = $_POST['status'];
     $uuid = $_POST['uuid'];
 
-    $stmt = $db->prepare("UPDATE games SET status=?, last_updated=NOW() WHERE uuid=?");
+    $stmt = $db->prepare("UPDATE games SET status=?, last_updated=UTC_TIMESTAMP() WHERE uuid=?");
     if(!$stmt) {
         die("error: ".mysqli_error($db));
     }
